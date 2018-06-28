@@ -3,7 +3,7 @@
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
-const config = require('./webpack.config.dev');
+const config = require('./webpack.config.dev')[0];
 const paths = require('./paths');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
@@ -74,11 +74,9 @@ module.exports = function(proxy, allowedHost) {
     https: protocol === 'https',
     host: host,
     overlay: false,
-    historyApiFallback: {
-      // Paths with dots should still use the history fallback.
-      // See https://github.com/facebookincubator/create-react-app/issues/387.
-      disableDotRule: true,
-    },
+    // Because we're using SSR in development mode, we need to handle the
+    // history API fallback in our own server (if at all).
+    historyApiFallback: false,
     public: allowedHost,
     proxy,
     before(app) {
@@ -91,5 +89,29 @@ module.exports = function(proxy, allowedHost) {
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
     },
+    // We use `webpack-hot-server-middleware` in development to enable
+    // hot-reloading of code changes on the server side, and to be able
+    // to work it needs to be mounted immediately after
+    // `webpack-dev-middleware`. We'll use WebpackDevServer's `after`
+    // callback to mount the `webpack-hot-server-middleware`, so we need
+    // to adjust the order of its "features" to call `after` immediately
+    // after `middleware`.
+    // This is the default order of features, with some features we don't
+    // need commented out and with `after` moved up in the order.
+    features: [
+      "compress",
+      "before",
+      "setup",
+      "headers",
+      "middleware",
+      "after",
+      // "proxy",
+      // "middleware",
+      "contentBaseFiles",
+      "watchContentBase",
+      // "magicHtml",
+      "contentBaseIndex",
+      // "after"
+    ],
   };
 };
