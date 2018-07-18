@@ -83,9 +83,14 @@ How it works
 - During local development, code changes are automatically recompiled and reloaded in your browser - even the code in 
   `src/server/`. 
   
-> **Note**: As with Create React App, only CSS changes are hot-reloaded without a browser refresh. Try 
-> [react-hot-loader][13] and [webpack-hot-middleware][14] if you’re interested in improving your hot-module-replacement
-> experience.
+> **Note**: As with Create React App, only CSS changes are hot-reloaded without a browser refresh.  If you’re interested 
+> in improving your hot-module-replacement experience, try [vanilla webpack HMR][29] first, especially if you don’t need 
+> to preserve component state (e.g. you use [Redux][30]). If that’s not enough for your use case, and you are brave, try
+> [react-hot-loader][14].
+> 
+> The error overlay provided by [create-react-app][1]’s HMR client is very nice, but if you want to try an alternative
+> then it’s easy to swap over to [webpack-hot-middleware][13]. It has more verbose console output too, which can be nice
+> when investigating HMR problems.
 
 ### Webpack configuration
 
@@ -166,8 +171,7 @@ The FOUC is inherent to the CSS configuration adopted by Create React App (i.e. 
 hot module replacement during development), but it isn’t an issue without SSR because without SSR you can’t see anything 
 at all until the client Javascript has executed!
 
-Personally, in my projects I delete the CSS configuration and use [JSS][27] instead. Although, hot module replacement 
-isn’t working with react-jss at the time of writing anyway ([this pull request][28] should fix it).
+Personally, in my projects I delete the CSS configuration and use [JSS][27] instead.
 
 Acknowledgements
 ----------------
@@ -207,3 +211,5 @@ and the idea of using [multiple Webpack configurations][12] to build the client 
 [26]: https://github.com/webpack-contrib/style-loader/issues/107
 [27]: https://github.com/cssinjs/react-jss
 [28]: https://github.com/cssinjs/react-jss/pull/123
+[29]: https://gist.github.com/gaearon/06bd9e2223556cb0d841
+[30]: https://redux.js.org/
