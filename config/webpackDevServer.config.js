@@ -14,7 +14,7 @@ const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/sockjs-node'
 const sockPort = process.env.WDS_SOCKET_PORT;
 
-module.exports = function(proxy, allowedHost) {
+module.exports = function (proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
@@ -93,16 +93,13 @@ module.exports = function(proxy, allowedHost) {
     https: getHttpsConfig(),
     host,
     overlay: false,
-    historyApiFallback: {
-      // Paths with dots should still use the history fallback.
-      // See https://github.com/facebook/create-react-app/issues/387.
-      disableDotRule: true,
-      index: paths.publicUrlOrPath,
-    },
+    // Because we're using SSR in development mode, we need to handle the
+    // history API fallback in our own server (if at all).
+    historyApiFallback: false,
     public: allowedHost,
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,
-    before(app, server) {
+    before (app, server) {
       // Keep `evalSourceMapMiddleware` and `errorOverlayMiddleware`
       // middlewares before `redirectServedPath` otherwise will not have any effect
       // This lets us fetch source contents from webpack for the error overlay
@@ -115,7 +112,7 @@ module.exports = function(proxy, allowedHost) {
         require(paths.proxySetup)(app);
       }
     },
-    after(app) {
+    after (app) {
       // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
       app.use(redirectServedPath(paths.publicUrlOrPath));
 
@@ -126,5 +123,27 @@ module.exports = function(proxy, allowedHost) {
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
     },
+    // We use `webpack-hot-server-middleware` in development to enable
+    // hot-reloading of code changes on the server side, and to be able
+    // to work it needs to be mounted immediately after
+    // `webpack-dev-middleware`. We'll use WebpackDevServer's `after`
+    // callback to mount the `webpack-hot-server-middleware`, so we need
+    // to adjust the order of its "features" to call `after` immediately
+    // after `middleware`.
+    // This is the default order of features, with some features we don't
+    // need commented out and with `after` moved up in the order.
+    features: [
+      'compress',
+      'setup',
+      'before',
+      'headers',
+      'contentBaseFiles',
+      'watchContentBase',
+      'middleware',
+      'after',
+      // 'magicHtml',
+      'contentBaseIndex'
+      // 'after'
+    ],
   };
 };
