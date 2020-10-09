@@ -91,11 +91,11 @@ How it works
 >   1. Run `yarn add -D webpack-hot-middleware`. (This is required because [create-react-app][1]’s HMR client doesn’t
 >      understand multiple compiler configurations, so forces a full refresh on every code update).
 >   2. Add the below code to `src/index.js`:
-       ```
-         module.hot.accept('./App', () => {
-           ReactDOM.render(<App />, document.getElementById('root'));
-         });
-       ```
+```javascript
+module.hot.accept('./App', () => {
+  ReactDOM.render(<App />, document.getElementById('root'));
+});
+```
 >   3. In `server.dev.js`, add `const webpackHotMiddleware = require('webpack-hot-middleware');` at the top,
 >      and `app.use(webpackHotMiddleware(compiler.compilers[0]));` as the first line of `serverConfig.after()`.
 >
