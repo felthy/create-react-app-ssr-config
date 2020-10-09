@@ -197,8 +197,8 @@ and the idea of using [multiple Webpack configurations][12] to build the client 
 [2]: https://github.com/facebook/create-react-app#creating-an-app
 [3]: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#npm-run-eject
 [4]: https://github.com/facebook/create-react-app/issues/990#issuecomment-257172453
-[5]: https://github.com/felthy/create-react-app-ssr-config/compare/0e79f551de0462086bcc4bad34729bcb29682e4f...master
-[6]: https://github.com/felthy/create-react-app-ssr-config/compare/0e79f551de0462086bcc4bad34729bcb29682e4f...master.patch
+[5]: https://github.com/felthy/create-react-app-ssr-config/compare/0e79f551de0462086bcc4bad34729bcb29682e4f...3.4.1
+[6]: https://github.com/felthy/create-react-app-ssr-config/compare/0e79f551de0462086bcc4bad34729bcb29682e4f...3.4.1.patch
 [7]: https://github.com/felthy/create-react-app-ssr-config/commit/0e79f551de0462086bcc4bad34729bcb29682e4f
 [8]: https://editorconfig.org/
 [9]: https://github.com/faceyspacey
