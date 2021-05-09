@@ -13,7 +13,7 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "fetch-everywhere": "^1.0.5",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
